@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 
+	gokit "github.com/cntech-io/cntechkit-go"
 	"github.com/redis/go-redis/v9"
 )
 
@@ -45,6 +46,10 @@ func (rdb *RedisKit) Connect() *RedisKit {
 	if status.Err() != nil {
 		panic(fmt.Sprintf("Failed to connect to Redis: %v", status.Err()))
 	}
+	gokit.NewLogger(&gokit.LoggerConfig{
+		AppName: "cntechkit-goredis",
+	}).Info("Connected to Redis!")
+
 	return rdb
 }
 
