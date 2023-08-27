@@ -21,6 +21,8 @@ type RedisKit struct {
 	client  *redis.Client
 }
 
+var env = NewRedisEnv()
+
 func NewRedis() *RedisKit {
 	return &RedisKit{
 		context: context.Background(),
@@ -28,7 +30,6 @@ func NewRedis() *RedisKit {
 }
 
 func (rdb *RedisKit) Connect() *RedisKit {
-	env := NewRedisEnv()
 	if env.Host == "" {
 		panic("Redis host is empty!")
 	}
