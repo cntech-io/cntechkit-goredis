@@ -1,35 +1,27 @@
-package cntechkitgoredis
+package redis
 
 import (
 	"context"
 	"fmt"
 
-	gokit "github.com/cntech-io/cntechkit-go"
+	"github.com/cntech-io/cntechkit-go/v2/logger"
 	"github.com/redis/go-redis/v9"
 )
 
-type RedisEnvName string
-
-const (
-	REDISDB_HOST     RedisEnvName = "REDISDB_HOST"
-	REDISDB_PORT     RedisEnvName = "REDISDB_PORT"
-	REDISDB_PASSWORD RedisEnvName = "REDISDB_PASSWORD"
-)
-
-type RedisKit struct {
+type redisInstance struct {
 	context context.Context
 	client  *redis.Client
 }
 
 var env = NewRedisEnv()
 
-func NewRedis() *RedisKit {
-	return &RedisKit{
+func NewRedis() *redisInstance {
+	return &redisInstance{
 		context: context.Background(),
 	}
 }
 
-func (rdb *RedisKit) Connect() *RedisKit {
+func (rdb *redisInstance) Connect() *redisInstance {
 	if env.Host == "" {
 		panic("Redis host is empty!")
 	}
@@ -47,13 +39,13 @@ func (rdb *RedisKit) Connect() *RedisKit {
 	if status.Err() != nil {
 		panic(fmt.Sprintf("Failed to connect to Redis: %v", status.Err()))
 	}
-	gokit.NewLogger(&gokit.LoggerConfig{
+	logger.NewLogger(&logger.LoggerConfig{
 		AppName: "cntechkit-goredis",
 	}).Info("Connected to Redis!")
 
 	return rdb
 }
 
-func (rdb *RedisKit) Do() *redis.Client {
+func (rdb *redisInstance) Do() *redis.Client {
 	return rdb.client
 }
